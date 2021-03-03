@@ -7,10 +7,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 
 import net.chriswareham.gui.DefaultComboBoxModel;
 import net.chriswareham.gui.GridBagPanel;
+import net.chriswareham.gui.SliderPanel;
 
 public class ElementPanel extends JPanel {
 
@@ -22,33 +22,33 @@ public class ElementPanel extends JPanel {
 
     private final JCheckBox reverseCheckBox = new JCheckBox();
 
-    private final JSlider levelSlider = new JSlider(0, 63);
+    private final SliderPanel levelSlider = new SliderPanel(0, 63);
 
-    private final JSlider panSlider = new JSlider(0, 32); // XXX 16 is centre
+    private final SliderPanel panSlider = new SliderPanel(-16, 16, 16);
 
-    private final JSlider pitchSlider = new JSlider(-3600, 3600);
+    private final SliderPanel pitchSlider = new SliderPanel(-3600, 3600);
 
-    private final JSlider decaySlider = new JSlider(0, 63);
+    private final SliderPanel decaySlider = new SliderPanel(0, 63);
 
     private final DefaultComboBoxModel<FilterType> filterTypeComboBoxModel = new DefaultComboBoxModel<>();
 
     private final JComboBox<FilterType> filterTypeComboBox = new JComboBox<>(filterTypeComboBoxModel);
 
-    private final JSlider filterCutoffSlider = new JSlider(0, 128); // XXX max is 115 for HPF
+    private final SliderPanel filterCutoffSlider = new SliderPanel(0, 128); // XXX max is 115 for HPF
 
-    private final JSlider filterResonanceSlider = new JSlider(0, 99);
+    private final SliderPanel filterResonanceSlider = new SliderPanel(0, 99);
 
-    private final JSlider filterEgLevelSlider = new JSlider(-63, 63);
+    private final SliderPanel filterEgLevelSlider = new SliderPanel(-63, 63);
 
-    private final JSlider filterEgRateSlider = new JSlider(0, 63);
+    private final SliderPanel filterEgRateSlider = new SliderPanel(0, 63);
 
-    private final JSlider levelSensitivitySlider = new JSlider(-7, 7);
+    private final SliderPanel levelSensitivitySlider = new SliderPanel(-7, 7);
 
-    private final JSlider pitchSensitivitySlider = new JSlider(-7, 7);
+    private final SliderPanel pitchSensitivitySlider = new SliderPanel(-7, 7);
 
-    private final JSlider egSensitivitySlider = new JSlider(-7, 7);
+    private final SliderPanel egSensitivitySlider = new SliderPanel(-7, 7);
 
-    private final JSlider filterSensitivitySlider = new JSlider(-7, 7);
+    private final SliderPanel filterSensitivitySlider = new SliderPanel(-7, 7);
 
     public ElementPanel() {
         super(new GridLayout(1, 3, 4, 4));
@@ -75,6 +75,7 @@ public class ElementPanel extends JPanel {
 
     private void createInterface() {
         waveComboBoxModel.addRows(Wave.values());
+        waveComboBox.addActionListener(event -> waveSelected());
         filterTypeComboBoxModel.addRows(FilterType.values());
 
         add(createWavePanel());
@@ -88,8 +89,8 @@ public class ElementPanel extends JPanel {
         return panel
             .addCell("Wave:")
             .addCell(waveComboBox, true)
+            .addCell("Reverse:")
             .addCell(reverseCheckBox)
-            .addCell("Reverse")
             .endRow()
             .addCell("Level:")
             .addCell(levelSlider, 3, true)
@@ -145,5 +146,13 @@ public class ElementPanel extends JPanel {
             .addCell(filterSensitivitySlider, true)
             .endRow()
             .addExpandingRow();
+    }
+
+    private void waveSelected() {
+        Wave wave = waveComboBoxModel.getSelectedRow();
+        reverseCheckBox.setEnabled(wave.ordinal() < Wave.DIG_WAVE.ordinal());
+        if (!reverseCheckBox.isEnabled()) {
+            reverseCheckBox.setSelected(false);
+        }
     }
 }

@@ -8,12 +8,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
 
 import net.chriswareham.gui.DefaultComboBoxModel;
 import net.chriswareham.gui.GridBagPanel;
 import net.chriswareham.gui.IdentifierTextField;
+import net.chriswareham.gui.SliderPanel;
 
 public class CommonPanel extends JPanel {
 
@@ -23,11 +23,11 @@ public class CommonPanel extends JPanel {
 
     private final JTextField nameTextField = new IdentifierTextField(NAME_PATTERN, 8, 8);
 
-    private final JSlider levelSlider = new JSlider(0, 63);
+    private final SliderPanel levelSlider = new SliderPanel(0, 63);
 
-    private final JSlider pitchEgLevelSlider = new JSlider(-72, 72);
+    private final SliderPanel pitchEgLevelSlider = new SliderPanel(-72, 72);
 
-    private final JSlider pitchEgRateSlider = new JSlider(0, 63);
+    private final SliderPanel pitchEgRateSlider = new SliderPanel(0, 63);
 
     private final JCheckBox polyCheckBox = new JCheckBox();
 
@@ -39,7 +39,7 @@ public class CommonPanel extends JPanel {
 
     private final JComboBox<OutputAssign> outputAssignComboBox = new JComboBox<>(outputAssignComboBoxModel);
 
-    private final JSlider individualOutputLevelSlider = new JSlider(0, 63);
+    private final SliderPanel individualOutputLevelSlider = new SliderPanel(0, 63);
 
     public CommonPanel() {
         super(new GridLayout(1, 3, 4, 4));
@@ -71,7 +71,7 @@ public class CommonPanel extends JPanel {
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return panel
             .addCell("Name:")
-            .addCell(nameTextField)
+            .addCell(nameTextField, true)
             .endRow()
             .addCell("Level:")
             .addCell(levelSlider, 2, true)
@@ -105,8 +105,6 @@ public class CommonPanel extends JPanel {
     }
 
     private JPanel createRightPanel() {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel;
+        return new JPanel();
     }
 }
