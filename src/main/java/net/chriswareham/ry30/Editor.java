@@ -8,15 +8,22 @@ import javax.swing.JTabbedPane;
 
 import net.chriswareham.gui.AbstractFrame;
 import net.chriswareham.gui.MenuUtils;
+import net.chriswareham.gui.StatusBar;
 import net.chriswareham.midi.Device;
 
 public class Editor extends AbstractFrame {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String STATUS_BAR_FORMAT = "Input device: %s Output device: %s";
+
     public static void main(final String... args) {
         new Editor().open();
     }
+
+    private Device inputDevice;
+
+    private Device outputDevice;
 
     private Voice voice = new Voice();
 
@@ -25,6 +32,8 @@ public class Editor extends AbstractFrame {
     private final ElementPanel element1Panel = new ElementPanel();
 
     private final ElementPanel element2Panel = new ElementPanel();
+
+    private final StatusBar statusBar = new StatusBar(String.format(STATUS_BAR_FORMAT, "-", "-"));
 
     public Editor() {
         super("Yamaha RY30 Editor");
@@ -42,6 +51,8 @@ public class Editor extends AbstractFrame {
         tabbedPane.addTab("Element 2", element2Panel);
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
+        getContentPane().add(statusBar, BorderLayout.SOUTH);
     }
 
     @Override
@@ -75,10 +86,16 @@ public class Editor extends AbstractFrame {
     }
 
     private void inputDeviceChanged(final Device device) {
-        // XXX
+        inputDevice = device;
+        updateStatusBar();
     }
 
     private void outputDeviceChanged(final Device device) {
-        // XXX
+        outputDevice = device;
+        updateStatusBar();
+    }
+
+    private void updateStatusBar() {
+        statusBar.setText(String.format(STATUS_BAR_FORMAT, inputDevice != null ? inputDevice : "-", outputDevice != null ? outputDevice : "-"));
     }
 }
