@@ -208,6 +208,13 @@ public class Voice implements SysExSerialisable {
 
         // Name
 
+        for (int i = 0; i < name.length(); ++i) {
+            VoiceUtils.encode(buffer, 42 + (i * 2), name.charAt(i));
+        }
+        for (int i = name.length(); i < 8; ++i) {
+            VoiceUtils.encode(buffer, 42 + (i * 2), ' ');
+        }
+
         VoiceUtils.encode(buffer, 58, 0xFF);
         VoiceUtils.encode(buffer, 60, 0xFF);
         VoiceUtils.encode(buffer, 62, 0xFF);
