@@ -69,6 +69,8 @@ public enum Wave {
 
     SD_ROOM5("Room snare 5"),
 
+    SD_SIDE("Side stick"),
+
     SD_TEKNO("Techno snare"),
 
     // HIHATS
@@ -89,7 +91,7 @@ public enum Wave {
 
     HH_OTR("1/4 open hi-hat"),
 
-    // HIHATS
+    // CYMBALS
 
     CY_CHINA("China cymbal"),
 
