@@ -201,6 +201,10 @@ public enum Wave {
 
     TRI_WAVE("Triangle wave");
 
+    public static int size() {
+        return values().length;
+    }
+
     private final String description;
 
     Wave(final String description) {

@@ -3,7 +3,7 @@ package net.chriswareham.gui;
 import java.awt.event.WindowEvent;
 
 /**
- * This interface is implemented by classes that wish to be notified when a
+ * This interface is implemented by classes that want to be notified when a
  * window has been closed.
  */
 public interface WindowClosedListener {

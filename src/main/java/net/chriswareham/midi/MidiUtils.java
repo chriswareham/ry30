@@ -12,11 +12,6 @@ import javax.sound.midi.MidiUnavailableException;
  */
 public final class MidiUtils {
     /**
-     * The default velocity.
-     */
-    public static final int DEFAULT_VELOCITY = 64;
-
-    /**
      * Get the MIDI devices that can be used to receive data.
      *
      * @return the MIDI devices that can be used to receive data
