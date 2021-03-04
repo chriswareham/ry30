@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 
 import net.chriswareham.gui.AbstractFrame;
 import net.chriswareham.gui.MenuUtils;
+import net.chriswareham.midi.Device;
 
 public class Editor extends AbstractFrame {
 
@@ -67,6 +68,17 @@ public class Editor extends AbstractFrame {
     }
 
     private void device() {
-        // TODO
+        new DeviceDialog(this)
+            .addInputDeviceChangedListener(device -> inputDeviceChanged(device))
+            .addOutputDeviceChangedListener(device -> outputDeviceChanged(device))
+            .open();
+    }
+
+    private void inputDeviceChanged(final Device device) {
+        // XXX
+    }
+
+    private void outputDeviceChanged(final Device device) {
+        // XXX
     }
 }
