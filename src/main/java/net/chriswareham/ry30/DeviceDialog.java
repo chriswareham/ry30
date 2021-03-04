@@ -75,12 +75,10 @@ public class DeviceDialog extends AbstractDialog {
     }
 
     private void inputDeviceSelected() {
-        Device device = inputDeviceComboBoxModel.getSelectedRow();
-        inputDeviceSelectedlisteners.forEach(listener -> listener.selected(device));
+        inputDeviceSelectedlisteners.forEach(listener -> listener.selected(inputDeviceComboBoxModel.getSelectedRow()));
     }
 
     private void outputDeviceSelected() {
-        Device device = outputDeviceComboBoxModel.getSelectedRow();
-        outputDeviceSelectedlisteners.forEach(listener -> listener.selected(device));
+        outputDeviceSelectedlisteners.forEach(listener -> listener.selected(outputDeviceComboBoxModel.getSelectedRow()));
     }
 }
