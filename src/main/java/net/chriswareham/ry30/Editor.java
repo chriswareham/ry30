@@ -2,8 +2,10 @@ package net.chriswareham.ry30;
 
 import java.awt.BorderLayout;
 
+import javax.sound.midi.Receiver;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
 import net.chriswareham.gui.AbstractFrame;
@@ -25,7 +27,9 @@ public class Editor extends AbstractFrame {
 
     private Device outputDevice;
 
-    private Voice voice = new Voice();
+    private final Voice voice = new Voice();
+
+    private final JMenuItem sendVoiceMenuItem = MenuUtils.createMenuItem("Send Voice", "S", "Send voice", event -> sendVoice(), false);
 
     private final CommonPanel commonPanel = new CommonPanel();
 
@@ -57,11 +61,7 @@ public class Editor extends AbstractFrame {
 
     @Override
     protected void populateInterface() {
-        voice.initialise();
-
-        commonPanel.setVoice(voice);
-        element1Panel.setElement(voice.getElement1());
-        element2Panel.setElement(voice.getElement2());
+        initialiseVoice();
     }
 
     @Override
@@ -80,6 +80,12 @@ public class Editor extends AbstractFrame {
         menu.addSeparator();
 
         menu.add(MenuUtils.createMenuItem("Exit", "X", "Exit", event -> close()));
+
+        menu = menuBar.add(MenuUtils.createMenu("Edit", "E", "Edit"));
+
+        menu.add(MenuUtils.createMenuItem("Intitialise Voice", "I", "Initialise voice", event -> initialiseVoice()));
+
+        menu.add(sendVoiceMenuItem);
 
         return menuBar;
     }
@@ -138,6 +144,24 @@ public class Editor extends AbstractFrame {
             }
             outputDevice = null;
             updateStatusBar();
+        }
+    }
+
+    private void initialiseVoice() {
+        voice.initialise();
+
+        commonPanel.setVoice(voice);
+        element1Panel.setElement(voice.getElement1());
+        element2Panel.setElement(voice.getElement2());
+    }
+
+    private void sendVoice() {
+        if (outputDevice != null) {
+            call(() -> {
+                try (Receiver receiver = outputDevice.getReceiver()) {
+                    receiver.send(voice.serialise(), -1);
+                }
+            });
         }
     }
 
