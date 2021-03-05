@@ -1,30 +1,31 @@
 package net.chriswareham.ry30;
 
-import net.chriswareham.midi.SysExSerialisable;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.SysexMessage;
 
 /**
  * This class describes a Yamaha RY30 voice.
  */
-public class Voice implements SysExSerialisable {
+public class Voice {
     /**
      * The voice dump header.
      */
-    private static final int[] VOICE_DUMP_HEADER = { 0xF0, 0x43, 0x00, 0x7A, 0x00, 0x76 };
+    private static final byte[] VOICE_DUMP_HEADER = { (byte) 0xF0, 0x43, 0x00, 0x7A, 0x00, 0x76 };
 
     /**
      * The voice dump ID.
      */
-    private static final int[] VOICE_DUMP_ID = { 'L', 'M', ' ', ' ', '0', '0', '1', '7', ' ', ' ', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    private static final byte[] VOICE_DUMP_ID = { 'L', 'M', ' ', ' ', '0', '0', '1', '7', ' ', ' ', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
     /**
      * The voice dump footer.
      */
-    private static final int VOICE_DUMP_FOOTER = 0xF7;
+    private static final byte VOICE_DUMP_FOOTER = (byte) 0xF7;
 
     /**
      * The buffer to encode a voice dump into.
      */
-    private final int[] buffer = new int[126];
+    private final byte[] buffer = new byte[126];
 
     /**
      * The source voice number.
@@ -193,10 +194,9 @@ public class Voice implements SysExSerialisable {
         return element2;
     }
 
-    @Override
-    public int[] sysExSerialise() {
-        buffer[30] = source;
-        buffer[31] = destination;
+    public SysexMessage serialise() throws InvalidMidiDataException {
+        buffer[30] = (byte) source;
+        buffer[31] = (byte) destination;
 
         // Common
 
@@ -257,7 +257,7 @@ public class Voice implements SysExSerialisable {
 
         buffer[124] = VoiceUtils.checksum(buffer, 6, 123);
 
-        return buffer;
+        return new SysexMessage(buffer, buffer.length);
     }
 
     private int combineOutputAssignAlternateGroupPoly() {

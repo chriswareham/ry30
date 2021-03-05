@@ -56,7 +56,7 @@ public class VoiceUtilsTest {
     }
 
     private void assertEquals(final int value, final int a, final int b) {
-        int[] buf = {0, 0};
+        byte[] buf = {0, 0};
         VoiceUtils.encode(buf, 0, value);
         Assertions.assertEquals(a, buf[0]);
         Assertions.assertEquals(b, buf[1]);
