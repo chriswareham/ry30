@@ -68,10 +68,10 @@ public class DeviceDialog extends AbstractDialog {
     @Override
     protected void populateInterface() {
         inputDeviceComboBoxModel.addRows(MidiUtils.getInputDevices());
-        inputDeviceComboBox.addItemListener(event -> inputDeviceSelected());
+        inputDeviceComboBox.addActionListener(event -> inputDeviceSelected());
 
         outputDeviceComboBoxModel.addRows(MidiUtils.getOutputDevices());
-        outputDeviceComboBox.addItemListener(event -> outputDeviceSelected());
+        outputDeviceComboBox.addActionListener(event -> outputDeviceSelected());
     }
 
     private void inputDeviceSelected() {

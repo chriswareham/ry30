@@ -1,13 +1,26 @@
 package net.chriswareham.midi;
 
 import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiUnavailableException;
 
-public class Device{
+public class Device {
 
     private final MidiDevice device;
 
     public Device(final MidiDevice device) {
         this.device = device;
+    }
+
+    public boolean isOpen() {
+        return device.isOpen();
+    }
+
+    public void open() throws MidiUnavailableException {
+        device.open();
+    }
+
+    public void close() {
+        device.close();
     }
 
     @Override

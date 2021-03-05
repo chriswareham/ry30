@@ -64,6 +64,12 @@ public class Editor extends AbstractFrame {
         element2Panel.setElement(voice.getElement2());
     }
 
+    @Override
+    protected void interfaceClosed() {
+        closeInputDevice();
+        closeOutputDevice();
+    }
+
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -86,13 +92,53 @@ public class Editor extends AbstractFrame {
     }
 
     private void inputDeviceChanged(final Device device) {
-        inputDevice = device;
-        updateStatusBar();
+        closeInputDevice();
+        openInputDevice(device);
     }
 
     private void outputDeviceChanged(final Device device) {
-        outputDevice = device;
-        updateStatusBar();
+        closeOutputDevice();
+        openOutputDevice(device);
+    }
+
+    private void openInputDevice(final Device device) {
+        call(() -> {
+            if (!device.isOpen()) {
+                device.open();
+            }
+            inputDevice = device;
+            updateStatusBar();
+        });
+    }
+
+    private void closeInputDevice() {
+        if (inputDevice != null) {
+            if (inputDevice.isOpen()) {
+                inputDevice.close();
+            }
+            inputDevice = null;
+            updateStatusBar();
+        }
+    }
+
+    private void openOutputDevice(final Device device) {
+        call(() -> {
+            if (!device.isOpen()) {
+                device.open();
+            }
+            outputDevice = device;
+            updateStatusBar();
+        });
+    }
+
+    private void closeOutputDevice() {
+        if (outputDevice != null) {
+            if (outputDevice.isOpen()) {
+                outputDevice.close();
+            }
+            outputDevice = null;
+            updateStatusBar();
+        }
     }
 
     private void updateStatusBar() {
