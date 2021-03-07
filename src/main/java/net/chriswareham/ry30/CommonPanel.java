@@ -11,11 +11,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 import net.chriswareham.gui.DefaultCheckBox;
 import net.chriswareham.gui.DefaultComboBoxModel;
 import net.chriswareham.gui.GridBagPanel;
 import net.chriswareham.gui.IdentifierTextField;
+import net.chriswareham.gui.IntegerSpinner;
 import net.chriswareham.gui.SliderPanel;
 
 /**
@@ -83,6 +85,16 @@ public class CommonPanel extends JPanel {
     private final SliderPanel individualOutputLevelSlider = new SliderPanel(0, 63, this::updateIndividualOutputLevel);
 
     /**
+     * The source spinner model.
+     */
+    private final SpinnerNumberModel sourceSpinnerModel = new SpinnerNumberModel(0, 0, 127, 1);
+
+    /**
+     * The destination spinner model.
+     */
+    private final SpinnerNumberModel destinationSpinnerModel = new SpinnerNumberModel(0, 0, 96, 1);
+
+    /**
      * The listener to notify when a voice has been updated.
      */
     private VoiceUpdatedListener listener;
@@ -137,6 +149,8 @@ public class CommonPanel extends JPanel {
         alternateGroupComboBoxModel.setSelectedRow(voice.getAlternateGroup());
         outputAssignComboBoxModel.setSelectedRow(voice.getOutputAssign());
         individualOutputLevelSlider.setValue(voice.getIndividualOutputLevel());
+        sourceSpinnerModel.setValue(voice.getSource());
+        destinationSpinnerModel.setValue(voice.getDestination());
     }
 
     /**
@@ -157,6 +171,9 @@ public class CommonPanel extends JPanel {
         outputAssignComboBoxModel.addRows(OutputAssign.values());
         outputAssignComboBox.addActionListener(event -> updateOutputAssign());
 
+        sourceSpinnerModel.addChangeListener(event -> updateSource());
+        destinationSpinnerModel.addChangeListener(event -> updateDestination());
+
         add(createLeftPanel());
         add(createMiddlePanel());
         add(createRightPanel());
@@ -168,9 +185,8 @@ public class CommonPanel extends JPanel {
      * @return the left panel
      */
     private JPanel createLeftPanel() {
-        GridBagPanel panel = new GridBagPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel
+        return new GridBagPanel()
+            .addBorder(BorderFactory.createLineBorder(Color.BLACK))
             .addCell("Name:")
             .addCell(nameTextField, true)
             .endRow()
@@ -192,9 +208,8 @@ public class CommonPanel extends JPanel {
      * @return the middle panel
      */
     private JPanel createMiddlePanel() {
-        GridBagPanel panel = new GridBagPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel
+        return new GridBagPanel()
+            .addBorder(BorderFactory.createLineBorder(Color.BLACK))
             .addCell("Poly:")
             .addCell(polyCheckBox, true)
             .endRow()
@@ -216,7 +231,15 @@ public class CommonPanel extends JPanel {
      * @return the right panel
      */
     private JPanel createRightPanel() {
-        return new JPanel();
+        return new GridBagPanel()
+            .addBorder(BorderFactory.createLineBorder(Color.BLACK))
+            .addCell("Source Voice:")
+            .addCell(new IntegerSpinner(sourceSpinnerModel, true), true)
+            .endRow()
+            .addCell("Destination Voice:")
+            .addCell(new IntegerSpinner(destinationSpinnerModel, true), true)
+            .endRow()
+            .addExpandingRow();
     }
 
     /**
@@ -296,6 +319,24 @@ public class CommonPanel extends JPanel {
         if (voice != null) {
             voice.setIndividualOutputLevel(individualOutputLevelSlider.getValue());
             fireVoiceUpdated();
+        }
+    }
+
+    /**
+     * Update the source voice number.
+     */
+    private void updateSource() {
+        if (voice != null) {
+            voice.setSource(sourceSpinnerModel.getNumber().intValue());
+        }
+    }
+
+    /**
+     * Update the destination voice number.
+     */
+    private void updateDestination() {
+        if (voice != null) {
+            voice.setDestination(destinationSpinnerModel.getNumber().intValue());
         }
     }
 

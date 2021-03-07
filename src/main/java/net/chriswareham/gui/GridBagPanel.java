@@ -7,6 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 /**
  * This class provides a panel with methods for laying out components in a grid.
@@ -108,6 +109,17 @@ public class GridBagPanel extends JPanel {
         } else {
             addCell(component);
         }
+    }
+
+    /**
+     * Add a border.
+     *
+     * @param border the border to add
+     * @return the panel
+     */
+    public GridBagPanel addBorder(final Border border) {
+        setBorder(border);
+        return this;
     }
 
     /**

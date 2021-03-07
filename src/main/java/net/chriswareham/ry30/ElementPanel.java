@@ -196,9 +196,8 @@ public class ElementPanel extends JPanel {
      * @return the wave panel
      */
     private JPanel createWavePanel() {
-        GridBagPanel panel = new GridBagPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel
+        return new GridBagPanel()
+            .addBorder(BorderFactory.createLineBorder(Color.BLACK))
             .addCell("Wave:")
             .addCell(waveComboBox, true)
             .addCell("Reverse:")
@@ -225,9 +224,8 @@ public class ElementPanel extends JPanel {
      * @return the filter panel
      */
     private JPanel createFilterPanel() {
-        GridBagPanel panel = new GridBagPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel
+        return new GridBagPanel()
+            .addBorder(BorderFactory.createLineBorder(Color.BLACK))
             .addCell("Filter Type:")
             .addCell(filterTypeComboBox, true)
             .endRow()
@@ -252,9 +250,8 @@ public class ElementPanel extends JPanel {
      * @return the sensitivity panel
      */
     private JPanel createSensitivityPanel() {
-        GridBagPanel panel = new GridBagPanel();
-        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        return panel
+        return new GridBagPanel()
+            .addBorder(BorderFactory.createLineBorder(Color.BLACK))
             .addCell("Level Sensitivity:")
             .addCell(levelSensitivitySlider, true)
             .endRow()
