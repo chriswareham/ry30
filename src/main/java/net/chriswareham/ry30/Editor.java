@@ -13,36 +13,79 @@ import net.chriswareham.gui.MenuUtils;
 import net.chriswareham.gui.StatusBar;
 import net.chriswareham.midi.Device;
 
+/**
+ * This class provides an editor frame for a Yamaha RY30 voice.
+ */
 public class Editor extends AbstractFrame {
-
+    /**
+     * The serial version UID.
+     */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The format string for the status bar.
+     */
     private static final String STATUS_BAR_FORMAT = "Input device: %s Output device: %s";
 
+    /**
+     * Main entry point for running the editor.
+     *
+     * @param args the command line arguments
+     */
     public static void main(final String... args) {
         new Editor().open();
     }
 
+    /**
+     * The current input device.
+     */
     private Device inputDevice;
 
+    /**
+     * The current output device.
+     */
     private Device outputDevice;
 
+    /**
+     * The current voice.
+     */
     private final Voice voice = new Voice();
 
+    /**
+     * The send voice menu item.
+     */
     private final JMenuItem sendVoiceMenuItem = MenuUtils.createMenuItem("Send Voice", "S", "Send voice", event -> sendVoice(), false);
 
+    /**
+     * The panel for editing the common values of a voice.
+     */
     private final CommonPanel commonPanel = new CommonPanel();
 
+    /**
+     * The panel for editing the first element of a voice.
+     */
     private final ElementPanel element1Panel = new ElementPanel();
 
+    /**
+     * The panel for editing the second element of a voice.
+     */
     private final ElementPanel element2Panel = new ElementPanel();
 
+    /**
+     * The status bar.
+     */
     private final StatusBar statusBar = new StatusBar(String.format(STATUS_BAR_FORMAT, "-", "-"));
 
+    /**
+     * Construct an instance of an editor frame for a Yamaha RY30 voice.
+     */
     public Editor() {
         super("Yamaha RY30 Editor");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void createInterface() {
         addWindowClosedListener(event -> System.exit(0));
@@ -59,17 +102,28 @@ public class Editor extends AbstractFrame {
         getContentPane().add(statusBar, BorderLayout.SOUTH);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void populateInterface() {
         initialiseVoice();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void interfaceClosed() {
         closeInputDevice();
         closeOutputDevice();
     }
 
+    /**
+     * Create the menu bar.
+     *
+     * @return the menu bar
+     */
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -90,6 +144,9 @@ public class Editor extends AbstractFrame {
         return menuBar;
     }
 
+    /**
+     * Show the device dialog.
+     */
     private void device() {
         new DeviceDialog(this)
             .addInputDeviceChangedListener(device -> inputDeviceChanged(device))
@@ -97,16 +154,31 @@ public class Editor extends AbstractFrame {
             .open();
     }
 
+    /**
+     * Handle the selection of an input device.
+     *
+     * @param device the selected input device
+     */
     private void inputDeviceChanged(final Device device) {
         closeInputDevice();
         openInputDevice(device);
     }
 
+    /**
+     * Handle the selection of an output device.
+     *
+     * @param device the selected output device
+     */
     private void outputDeviceChanged(final Device device) {
         closeOutputDevice();
         openOutputDevice(device);
     }
 
+    /**
+     * Open an input device.
+     *
+     * @param device the input device to open
+     */
     private void openInputDevice(final Device device) {
         call(() -> {
             if (!device.isOpen()) {
@@ -117,6 +189,9 @@ public class Editor extends AbstractFrame {
         });
     }
 
+    /**
+     * Close the current input device.
+     */
     private void closeInputDevice() {
         if (inputDevice != null) {
             if (inputDevice.isOpen()) {
@@ -127,26 +202,39 @@ public class Editor extends AbstractFrame {
         }
     }
 
+    /**
+     * Open an output device.
+     *
+     * @param device the output device to open
+     */
     private void openOutputDevice(final Device device) {
         call(() -> {
             if (!device.isOpen()) {
                 device.open();
             }
             outputDevice = device;
+            sendVoiceMenuItem.setEnabled(true);
             updateStatusBar();
         });
     }
 
+    /**
+     * Close the current output device.
+     */
     private void closeOutputDevice() {
         if (outputDevice != null) {
             if (outputDevice.isOpen()) {
                 outputDevice.close();
             }
             outputDevice = null;
+            sendVoiceMenuItem.setEnabled(false);
             updateStatusBar();
         }
     }
 
+    /**
+     * Initialise the current voice.
+     */
     private void initialiseVoice() {
         voice.initialise();
 
@@ -155,6 +243,9 @@ public class Editor extends AbstractFrame {
         element2Panel.setElement(voice.getElement2());
     }
 
+    /**
+     * Send the current voice via the current output device.
+     */
     private void sendVoice() {
         if (outputDevice != null) {
             call(() -> {
@@ -165,6 +256,9 @@ public class Editor extends AbstractFrame {
         }
     }
 
+    /**
+     * Update the status bar.
+     */
     private void updateStatusBar() {
         statusBar.setText(String.format(STATUS_BAR_FORMAT, inputDevice != null ? inputDevice : "-", outputDevice != null ? outputDevice : "-"));
     }

@@ -15,37 +15,84 @@ import net.chriswareham.gui.GridBagPanel;
 import net.chriswareham.gui.IdentifierTextField;
 import net.chriswareham.gui.SliderPanel;
 
+/**
+ * This class provides a panel for editing the common values of a voice.
+ */
 public class CommonPanel extends JPanel {
-
+    /**
+     * The serial version UID.
+     */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The pattern that matches a valid name.
+     */
     private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z0-9 ]+");
 
+    /**
+     * The name text field.
+     */
     private final JTextField nameTextField = new IdentifierTextField(NAME_PATTERN, 8, 8);
 
+    /**
+     * The level slider.
+     */
     private final SliderPanel levelSlider = new SliderPanel(0, 63);
 
+    /**
+     * The pitch EG level slider.
+     */
     private final SliderPanel pitchEgLevelSlider = new SliderPanel(-72, 72);
 
+    /**
+     * The pitch EG rate slider.
+     */
     private final SliderPanel pitchEgRateSlider = new SliderPanel(0, 63);
 
+    /**
+     * The polyphonic check box.
+     */
     private final JCheckBox polyCheckBox = new JCheckBox();
 
+    /**
+     * The alternate group combo box model.
+     */
     private final DefaultComboBoxModel<AlternateGroup> alternateGroupComboBoxModel = new DefaultComboBoxModel<>();
 
+    /**
+     * The alternate group combo box.
+     */
     private final JComboBox<AlternateGroup> alternateGroupComboBox = new JComboBox<>(alternateGroupComboBoxModel);
 
+    /**
+     * The output assignment combo box model.
+     */
     private final DefaultComboBoxModel<OutputAssign> outputAssignComboBoxModel = new DefaultComboBoxModel<>();
 
+    /**
+     * The output assignment combo box.
+     */
     private final JComboBox<OutputAssign> outputAssignComboBox = new JComboBox<>(outputAssignComboBoxModel);
 
+    /**
+     * The individual output level slider.
+     */
     private final SliderPanel individualOutputLevelSlider = new SliderPanel(0, 63);
 
+    /**
+     * Construct an instance of a panel for editing the common values of a
+     * voice.
+     */
     public CommonPanel() {
         super(new GridLayout(1, 3, 4, 4));
         createInterface();
     }
 
+    /**
+     * Set the voice to edit.
+     *
+     * @param voice the voice to edit
+     */
     public void setVoice(final Voice voice) {
         nameTextField.setText(voice.getName());
         levelSlider.setValue(voice.getLevel());
@@ -57,6 +104,9 @@ public class CommonPanel extends JPanel {
         individualOutputLevelSlider.setValue(voice.getIndividualOutputLevel());
     }
 
+    /**
+     * Create the interface.
+     */
     private void createInterface() {
         alternateGroupComboBoxModel.addRows(AlternateGroup.values());
         outputAssignComboBoxModel.addRows(OutputAssign.values());
@@ -66,6 +116,11 @@ public class CommonPanel extends JPanel {
         add(createRightPanel());
     }
 
+    /**
+     * Create the left panel.
+     *
+     * @return the left panel
+     */
     private JPanel createLeftPanel() {
         GridBagPanel panel = new GridBagPanel();
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -85,6 +140,11 @@ public class CommonPanel extends JPanel {
             .addExpandingRow();
     }
 
+    /**
+     * Create the middle panel.
+     *
+     * @return the middle panel
+     */
     private JPanel createMiddlePanel() {
         GridBagPanel panel = new GridBagPanel();
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -104,6 +164,11 @@ public class CommonPanel extends JPanel {
             .addExpandingRow();
     }
 
+    /**
+     * Create the right panel.
+     *
+     * @return the right panel
+     */
     private JPanel createRightPanel() {
         return new JPanel();
     }
