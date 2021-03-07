@@ -1,8 +1,11 @@
 package net.chriswareham.ry30;
 
 import java.awt.BorderLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.midi.Receiver;
+import javax.sound.midi.SysexMessage;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,6 +24,11 @@ public class Editor extends AbstractFrame {
      * The serial version UID.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * The logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(Editor.class.getName());
 
     /**
      * The format string for the status bar.
@@ -250,7 +258,9 @@ public class Editor extends AbstractFrame {
         if (outputDevice != null) {
             call(() -> {
                 try (Receiver receiver = outputDevice.getReceiver()) {
-                    receiver.send(voice.serialise(), -1);
+                    SysexMessage message = voice.serialise();
+                    logMessage(message);
+                    receiver.send(message, -1);
                 }
             });
         }
@@ -268,5 +278,24 @@ public class Editor extends AbstractFrame {
      */
     private void voiceUpdated() {
         sendVoice();
+    }
+
+    /**
+     * Log a System Exclusive message.
+     *
+     * @param message the System Exclusive message to log
+     */
+    private void logMessage(final SysexMessage message) {
+        if (LOGGER.isLoggable(Level.INFO)) {
+            byte[] data = message.getMessage();
+            StringBuilder sb = new StringBuilder("Message : ");
+            for (int i = 0; i < data.length; ++i) {
+                if (i > 0) {
+                    sb.append(' ');
+                }
+                sb.append(String.format("%02X", data[i]));
+            }
+            LOGGER.info(sb.toString());
+        }
     }
 }

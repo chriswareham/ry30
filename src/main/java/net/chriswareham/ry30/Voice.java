@@ -1,8 +1,5 @@
 package net.chriswareham.ry30;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.SysexMessage;
 
@@ -12,11 +9,6 @@ import net.chriswareham.midi.MidiUtils;
  * This class describes a Yamaha RY30 voice.
  */
 public class Voice {
-    /**
-     * The logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(Voice.class.getName());
-
     /**
      * The voice dump header.
      */
@@ -385,8 +377,6 @@ public class Voice {
 
         buffer[124] = VoiceUtils.checksum(buffer, 6, 123);
 
-        logBuffer();
-
         return new SysexMessage(buffer, buffer.length);
     }
 
@@ -406,21 +396,5 @@ public class Voice {
         }
 
         return value;
-    }
-
-    /**
-     * Log a System Exclusive voice dump.
-     */
-    private void logBuffer() {
-        if (LOGGER.isLoggable(Level.INFO)) {
-            StringBuilder sb = new StringBuilder("Voice dump : ");
-            for (int i = 0; i < buffer.length; ++i) {
-                if (i > 0) {
-                    sb.append(' ');
-                }
-                sb.append(String.format("%02X", buffer[i]));
-            }
-            LOGGER.info(sb.toString());
-        }
     }
 }
