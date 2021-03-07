@@ -15,6 +15,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <java.version>11</java.version>
         <junit.version>5.7.1</junit.version>
+        <checkstyle.version>8.41</checkstyle.version>
     </properties>
 
     <dependencies>
@@ -52,6 +53,23 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>src/main/tools/checkstyle.xml</configLocation>
+                    <linkXRef>false</linkXRef>
+                </configuration>
             </plugin>
 
         </plugins>

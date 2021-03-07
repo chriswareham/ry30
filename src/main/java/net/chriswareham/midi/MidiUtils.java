@@ -14,6 +14,16 @@ import javax.sound.midi.Synthesizer;
  */
 public final class MidiUtils {
     /**
+     * The initial byte of a System Exclusive message.
+     */
+    public static final byte SYSEX_INITIAL_BYTE = (byte) 0xF0;
+
+    /**
+     * The terminating byte of a System Exclusive message.
+     */
+    public static final byte SYSEX_TERMINATING_BYTE = (byte) 0xF7;
+
+    /**
      * Get the devices that can be used to receive MIDI data.
      *
      * @return the devices that can be used to receive MIDI data

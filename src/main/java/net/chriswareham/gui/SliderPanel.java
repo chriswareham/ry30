@@ -60,7 +60,7 @@ public class SliderPanel extends JPanel {
 
         updateLabel();
 
-        slider.addChangeListener(event-> updateLabel());
+        slider.addChangeListener(event -> updateLabel());
     }
 
     /**
