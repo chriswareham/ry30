@@ -59,17 +59,17 @@ public class Editor extends AbstractFrame {
     /**
      * The panel for editing the common values of a voice.
      */
-    private final CommonPanel commonPanel = new CommonPanel();
+    private final CommonPanel commonPanel = new CommonPanel(this::voiceUpdated);
 
     /**
      * The panel for editing the first element of a voice.
      */
-    private final ElementPanel element1Panel = new ElementPanel();
+    private final ElementPanel element1Panel = new ElementPanel(this::voiceUpdated);
 
     /**
      * The panel for editing the second element of a voice.
      */
-    private final ElementPanel element2Panel = new ElementPanel();
+    private final ElementPanel element2Panel = new ElementPanel(this::voiceUpdated);
 
     /**
      * The status bar.
@@ -261,5 +261,12 @@ public class Editor extends AbstractFrame {
      */
     private void updateStatusBar() {
         statusBar.setText(String.format(STATUS_BAR_FORMAT, inputDevice != null ? inputDevice : "-", outputDevice != null ? outputDevice : "-"));
+    }
+
+    /**
+     * Notified when a voice has been updated.
+     */
+    private void voiceUpdated() {
+        sendVoice();
     }
 }

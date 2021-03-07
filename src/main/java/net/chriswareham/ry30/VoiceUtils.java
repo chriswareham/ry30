@@ -17,6 +17,7 @@ public final class VoiceUtils {
      * @param value the value to encode
      */
     public static void encode(final byte[] buf, final int index, final int value) {
+        assert value >= 0 && value <= 255;
         buf[index] = HEX_ASCII[value / 16];
         buf[index + 1] = HEX_ASCII[value % 16];
     }

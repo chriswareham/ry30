@@ -31,6 +31,11 @@ public class VoiceUtilsTest {
     }
 
     @Test
+    public void encode255() {
+        encodeAssertEquals(255, 0x46, 0x46);
+    }
+
+    @Test
     public void encodeAsciiUppercaseA() {
         encodeAssertEquals('A', 0x34, 0x31);
     }

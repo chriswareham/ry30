@@ -71,7 +71,9 @@ public enum Wave {
      */
     BD_TEKNO("Techno kick"),
 
+    //
     // SNARES
+    //
 
     /**
      * Analogue snare 1.

@@ -31,13 +31,29 @@ public class SliderPanel extends JPanel {
     private final JSlider slider;
 
     /**
+     * The listener to notify when the slider has finished updating.
+     */
+    private SliderPanelListener listener;
+
+    /**
      * Construct an instance of the slider panel.
      *
      * @param min the minimum value of the slider
      * @param max the maximum value of the slider
      */
     public SliderPanel(final int min, final int max) {
-        this(min, max, 0);
+        this(min, max, 0, null);
+    }
+
+    /**
+     * Construct an instance of the slider panel.
+     *
+     * @param min the minimum value of the slider
+     * @param max the maximum value of the slider
+     * @param listener the listener to notify when the slider value changes
+     */
+    public SliderPanel(final int min, final int max, final SliderPanelListener listener) {
+        this(min, max, 0, listener);
     }
 
     /**
@@ -48,6 +64,18 @@ public class SliderPanel extends JPanel {
      * @param offset the offset to apply to the slider value
      */
     public SliderPanel(final int min, final int max, final int offset) {
+        this(min, max, offset, null);
+    }
+
+    /**
+     * Construct an instance of the slider panel.
+     *
+     * @param min the minimum value of the slider
+     * @param max the maximum value of the slider
+     * @param offset the offset to apply to the slider value
+     * @param listener the listener to notify when the slider value changes
+     */
+    public SliderPanel(final int min, final int max, final int offset, final SliderPanelListener listener) {
         super(new BorderLayout());
 
         this.offset = offset;
@@ -61,6 +89,17 @@ public class SliderPanel extends JPanel {
         updateLabel();
 
         slider.addChangeListener(event -> updateLabel());
+
+        this.listener = listener;
+    }
+
+    /**
+     * Set the listener to notify when the slider has finished updating.
+     *
+     * @param listener the listener to notify when the slider has finished updating
+     */
+    public void setListener(final SliderPanelListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -86,5 +125,8 @@ public class SliderPanel extends JPanel {
      */
     private void updateLabel() {
         label.setText(Integer.toString(slider.getValue()));
+        if (!slider.getValueIsAdjusting() && listener != null) {
+            listener.updated();
+        }
     }
 }

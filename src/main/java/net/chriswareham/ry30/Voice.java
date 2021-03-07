@@ -397,10 +397,12 @@ public class Voice {
      * @return the 8 bit value
      */
     private int combineOutputAssignAlternateGroupPoly() {
-        int value = outputAssign.ordinal() + (alternateGroup.ordinal() * 10);
+        int value = outputAssign.ordinal();
+
+        value |= alternateGroup.ordinal() << 4;
 
         if (poly) {
-            value += 0x80;
+            value |= 0x80;
         }
 
         return value;
