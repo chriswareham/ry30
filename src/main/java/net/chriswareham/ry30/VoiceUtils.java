@@ -5,6 +5,11 @@ package net.chriswareham.ry30;
  */
 public final class VoiceUtils {
     /**
+     * The ASCII representation of hex values.
+     */
+    private static final byte[] HEX_ASCII = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46};
+
+    /**
      * Encode a value for a System Exclusive message.
      *
      * @param buf the buffer to encode the value to
@@ -12,12 +17,8 @@ public final class VoiceUtils {
      * @param value the value to encode
      */
     public static void encode(final byte[] buf, final int index, final int value) {
-        //
-        // TODO : work out a more efficient way to do this
-        //
-        String str = String.format("%02X", value);
-        buf[index] = (byte) str.charAt(0);
-        buf[index + 1] = (byte) str.charAt(1);
+        buf[index] = HEX_ASCII[value / 16];
+        buf[index + 1] = HEX_ASCII[value % 16];
     }
 
     /**
