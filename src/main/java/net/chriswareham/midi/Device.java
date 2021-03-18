@@ -31,7 +31,7 @@ public class Device implements AutoCloseable {
      * @return whether the device is open
      */
     public boolean isOpen() {
-        return device.isOpen();
+        return device != null && device.isOpen();
     }
 
     /**
@@ -40,7 +40,9 @@ public class Device implements AutoCloseable {
      * @throws MidiUnavailableException if the device cannot be opened
      */
     public void open() throws MidiUnavailableException {
-        device.open();
+        if (device != null) {
+            device.open();
+        }
     }
 
     /**
@@ -48,7 +50,9 @@ public class Device implements AutoCloseable {
      */
     @Override
     public void close() {
-        device.close();
+        if (device != null) {
+            device.close();
+        }
     }
 
     /**
@@ -58,7 +62,7 @@ public class Device implements AutoCloseable {
      * @throws MidiUnavailableException if a receiver cannot be obtained
      */
     public Receiver getReceiver() throws MidiUnavailableException {
-        return device.getReceiver();
+        return device != null ? device.getReceiver() : null;
     }
 
     /**
@@ -68,7 +72,7 @@ public class Device implements AutoCloseable {
      * @throws MidiUnavailableException if a transmitter cannot be obtained
      */
     public Transmitter getTransmitter() throws MidiUnavailableException {
-        return device.getTransmitter();
+        return device != null ? device.getTransmitter() : null;
     }
 
     /**
@@ -78,6 +82,33 @@ public class Device implements AutoCloseable {
      */
     @Override
     public String toString() {
-        return device.getDeviceInfo().getName();
+        return device != null ? device.getDeviceInfo().getName() : "None";
+    }
+
+    /**
+     * Get whether an object is equal to the device.
+     *
+     * @param that the object
+     * @return whether the object is equal to the device
+     */
+    @Override
+    public boolean equals(final Object that) {
+        if (this == that) {
+            return true;
+        }
+        if (!(that instanceof Device)) {
+            return false;
+        }
+        return toString().equals(that.toString());
+    }
+
+    /**
+     * Get a hash code for the device.
+     *
+     * @return the hash code for the device
+     */
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 }

@@ -25,6 +25,21 @@ public class DeviceDialog extends AbstractDialog {
     private static final long serialVersionUID = 1L;
 
     /**
+     * The dummy input and output device.
+     */
+    private static final Device DUMMY_DEVICE = new Device(null);
+
+    /**
+     * The current input device.
+     */
+    private final Device inputDevice;
+
+    /**
+     * The current output device.
+     */
+    private final Device outputDevice;
+
+    /**
      * The listeners to inform when an input device has been selected.
      */
     private final List<DeviceSelectedListener> inputDeviceSelectedlisteners = new CopyOnWriteArrayList<>();
@@ -59,9 +74,13 @@ public class DeviceDialog extends AbstractDialog {
      * device.
      *
      * @param parent the parent window
+     * @param inputDevice the current input device
+     * @param outputDevice the current output device
      */
-    public DeviceDialog(final Window parent) {
+    public DeviceDialog(final Window parent, final Device inputDevice, final Device outputDevice) {
         super(parent, "Device");
+        this.inputDevice = inputDevice;
+        this.outputDevice = outputDevice;
     }
 
     /**
@@ -114,10 +133,18 @@ public class DeviceDialog extends AbstractDialog {
      */
     @Override
     protected void populateInterface() {
+        inputDeviceComboBoxModel.addRow(DUMMY_DEVICE);
         inputDeviceComboBoxModel.addRows(MidiUtils.getInputDevices());
+        if (inputDevice != null) {
+            inputDeviceComboBoxModel.setSelectedRow(inputDevice);
+        }
         inputDeviceComboBox.addActionListener(event -> inputDeviceSelected());
 
+        outputDeviceComboBoxModel.addRow(DUMMY_DEVICE);
         outputDeviceComboBoxModel.addRows(MidiUtils.getOutputDevices());
+        if (outputDevice != null) {
+            outputDeviceComboBoxModel.setSelectedRow(outputDevice);
+        }
         outputDeviceComboBox.addActionListener(event -> outputDeviceSelected());
     }
 
@@ -125,13 +152,25 @@ public class DeviceDialog extends AbstractDialog {
      * Inform the listeners that an input device has been selected.
      */
     private void inputDeviceSelected() {
-        inputDeviceSelectedlisteners.forEach(listener -> listener.selected(inputDeviceComboBoxModel.getSelectedRow()));
+        Device device = inputDeviceComboBoxModel.getSelectedRow();
+        if (device == DUMMY_DEVICE) {
+            device = null;
+        }
+        for (DeviceSelectedListener listener : inputDeviceSelectedlisteners) {
+            listener.selected(device);
+        }
     }
 
     /**
      * Inform the listeners that an output device has been selected.
      */
     private void outputDeviceSelected() {
-        outputDeviceSelectedlisteners.forEach(listener -> listener.selected(outputDeviceComboBoxModel.getSelectedRow()));
+        Device device = outputDeviceComboBoxModel.getSelectedRow();
+        if (device == DUMMY_DEVICE) {
+            device = null;
+        }
+        for (DeviceSelectedListener listener : outputDeviceSelectedlisteners) {
+            listener.selected(device);
+        }
     }
 }

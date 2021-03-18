@@ -156,7 +156,7 @@ public class Editor extends AbstractFrame {
      * Show the device dialog.
      */
     private void device() {
-        new DeviceDialog(this)
+        new DeviceDialog(this, inputDevice, outputDevice)
             .addInputDeviceChangedListener(device -> inputDeviceChanged(device))
             .addOutputDeviceChangedListener(device -> outputDeviceChanged(device))
             .open();
@@ -188,13 +188,15 @@ public class Editor extends AbstractFrame {
      * @param device the input device to open
      */
     private void openInputDevice(final Device device) {
-        call(() -> {
-            if (!device.isOpen()) {
-                device.open();
-            }
-            inputDevice = device;
-            updateStatusBar();
-        });
+        if (device != null) {
+            call(() -> {
+                if (!device.isOpen()) {
+                    device.open();
+                }
+                inputDevice = device;
+                updateStatusBar();
+            });
+        }
     }
 
     /**
@@ -216,14 +218,16 @@ public class Editor extends AbstractFrame {
      * @param device the output device to open
      */
     private void openOutputDevice(final Device device) {
-        call(() -> {
-            if (!device.isOpen()) {
-                device.open();
-            }
-            outputDevice = device;
-            sendVoiceMenuItem.setEnabled(true);
-            updateStatusBar();
-        });
+        if (device != null) {
+            call(() -> {
+                if (!device.isOpen()) {
+                    device.open();
+                }
+                outputDevice = device;
+                sendVoiceMenuItem.setEnabled(true);
+                updateStatusBar();
+            });
+        }
     }
 
     /**
