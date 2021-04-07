@@ -24,6 +24,10 @@ Once built, the tool can be run with the following command:
 ```
 java -jar target/ry30-*.jar
 ```
+## System Exclusive Messages
+
+The RY30 doesn't seem to support the setting of individual voice parameters, so
+a full voice message has to be sent for each parameter change.
 
 ## Example Voice Request
 
