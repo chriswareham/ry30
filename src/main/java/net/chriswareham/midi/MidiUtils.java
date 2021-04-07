@@ -86,7 +86,10 @@ public final class MidiUtils {
      * @return whether the device id a hardware MIDI input
      */
     public static boolean isInputDevice(final MidiDevice device) {
-        return !(device instanceof Sequencer) && !(device instanceof Synthesizer) && device.getMaxTransmitters() != 0;
+        return device != null
+            && !(device instanceof Sequencer)
+            && !(device instanceof Synthesizer)
+            && device.getMaxTransmitters() != 0;
     }
 
     /**
@@ -96,7 +99,10 @@ public final class MidiUtils {
      * @return whether the device id a hardware MIDI output
      */
     public static boolean isOutputDevice(final MidiDevice device) {
-        return !(device instanceof Sequencer) && !(device instanceof Synthesizer) && device.getMaxReceivers() != 0;
+        return device != null
+            && !(device instanceof Sequencer)
+            && !(device instanceof Synthesizer)
+            && device.getMaxReceivers() != 0;
     }
 
     /**
